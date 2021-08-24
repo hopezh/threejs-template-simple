@@ -17,15 +17,15 @@ const sizes = {
 
 // [-] window event listener
 window.addEventListener("resize", () => {
-  // [.] Update sizes
+  // [.] update sizes
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
 
-  // [.] Update camera
+  // [.] update camera
   camera.aspect = sizes.width / sizes.height;
   camera.updateProjectionMatrix();
 
-  // [.] Update renderer
+  // [.] update renderer
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
