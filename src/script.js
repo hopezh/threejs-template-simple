@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+// [-] base
 /**
  * Base
  */
@@ -11,6 +12,7 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+// [-] size 
 /**
  * Sizes
  */
@@ -34,6 +36,7 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+// [-] camera
 /**
  * Camera
  */
@@ -48,6 +51,7 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
+// [-] geometry
 /**
  * Cube
  */
@@ -57,6 +61,7 @@ const cube = new THREE.Mesh(
 )
 scene.add(cube)
 
+// [-] renderer 
 /**
  * Renderer
  */
@@ -67,6 +72,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+// [-] animate 
 /**
  * Animate
  */
