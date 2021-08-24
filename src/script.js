@@ -50,7 +50,7 @@ controls.enableDamping = true;
 // [+] Geometry
 const cube = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0xff0000 })
+  new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
 );
 scene.add(cube);
 
@@ -71,13 +71,13 @@ const tick = () => {
   const deltaTime = elapsedTime - lastElapsedTime;
   lastElapsedTime = elapsedTime;
 
-  // Update controls
+  // [.] update controls
   controls.update();
 
-  // Render
+  // [.] render
   renderer.render(scene, camera);
 
-  // Call tick again on the next frame
+  // [.] call tick again on the next frame
   window.requestAnimationFrame(tick);
 };
 
