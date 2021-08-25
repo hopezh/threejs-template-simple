@@ -38,9 +38,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.x = 1;
-camera.position.y = 1;
-camera.position.z = 1;
+camera.position.x = 1.0;
+camera.position.y = 0.8;
+camera.position.z = 1.5;
 scene.add(camera);
 
 // [-] controls
