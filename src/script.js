@@ -2,6 +2,9 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+// [+] Var
+var ToRad = Math.PI / 180;
+
 // [+] Base
 // [-] canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -35,23 +38,83 @@ window.addEventListener("resize", () => {
 const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
-  0.1,
-  100
+  0.01,
+  1000
 );
 camera.position.x = 1.0;
 camera.position.y = 0.8;
 camera.position.z = 1.5;
 scene.add(camera);
 
-// [-] controls
+// [+] Lights
+// [-] ambient light
+scene.add(new THREE.AmbientLight(0x555555));
+
+// [+] controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-// [+] Geometry
-const cube = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+// [+] gradient background
+var buffgeoBack = new THREE.IcosahedronGeometry(100, 5);
+
+var back = new THREE.Mesh(
+  buffgeoBack,
+  new THREE.MeshBasicMaterial({
+    map: gradTexture([
+      [1.0, 0.75, 0.5, 0.25],
+      ["#1B1D1E", "#3D4143", "#72797D", "#b0babf"],
+    ]),
+    side: THREE.BackSide,
+    depthWrite: false,
+    fog: false,
+  })
 );
+
+// rotate gradient background
+back.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(15 * ToRad));
+scene.add(back);
+
+// [-] gradient texture
+function gradTexture(color) {
+  var c = document.createElement("canvas");
+  var ct = c.getContext("2d");
+  var size = 1024;
+  c.width = 16;
+  c.height = size;
+  var gradient = ct.createLinearGradient(0, 0, 0, size);
+  var i = color[0].length;
+  while (i--) {
+    gradient.addColorStop(color[0][i], color[1][i]);
+  }
+  ct.fillStyle = gradient;
+  ct.fillRect(0, 0, 16, size);
+  var texture = new THREE.Texture(c);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// [+] Helper
+// [-] grid helper
+const gridSize = 10;
+const gridDivisions = 10;
+const gridHelper = new THREE.GridHelper(gridSize, gridDivisions);
+scene.add(gridHelper);
+
+// [-] axes helper
+scene.add(new THREE.AxesHelper(1));
+
+// [+] Geometry
+// [-] geom
+const cubeGeom = new THREE.BoxGeometry(0.6, 0.4, 0.2);
+// [-] mat
+const cubeMat = new THREE.MeshLambertMaterial({
+  color: 0x00ff00,
+  opacity: 0.5,
+  transparent: true,
+  wireframe: false,
+});
+// [-] mesh
+const cube = new THREE.Mesh(cubeGeom, cubeMat);
 scene.add(cube);
 
 // [+] Renderer
