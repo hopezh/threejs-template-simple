@@ -5,33 +5,17 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // [+] Var
 var ToRad = Math.PI / 180;
 
-// [+] Base
-// [-] canvas
+// [+] Canvas
 const canvas = document.querySelector("canvas.webgl");
 
-// [-] scene
+// [+] Scene
 const scene = new THREE.Scene();
 
-// [-] size
+// [+] Window size
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 };
-
-// [-] window event listener
-window.addEventListener("resize", () => {
-  // [.] update sizes
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
-
-  // [.] update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
-
-  // [.] update renderer
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
 
 // [+] Camera
 // [-] base camera
@@ -41,6 +25,7 @@ const camera = new THREE.PerspectiveCamera(
   0.01,
   1000
 );
+// [-] cam position
 camera.position.x = 1.0;
 camera.position.y = 0.8;
 camera.position.z = 1.5;
@@ -50,13 +35,14 @@ scene.add(camera);
 // [-] ambient light
 scene.add(new THREE.AmbientLight(0x555555));
 
-// [+] controls
+// [+] Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-// [+] gradient background
+// [+] Gradient background
+// [-] gradient geom
 var buffgeoBack = new THREE.IcosahedronGeometry(100, 5);
-
+// [-] gradient mesh
 var back = new THREE.Mesh(
   buffgeoBack,
   new THREE.MeshBasicMaterial({
@@ -70,9 +56,8 @@ var back = new THREE.Mesh(
   })
 );
 
-// rotate gradient background
-back.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(15 * ToRad));
-scene.add(back);
+// [-] rotate background if needed
+// back.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(15 * ToRad));
 
 // [-] gradient texture
 function gradTexture(color) {
@@ -92,6 +77,7 @@ function gradTexture(color) {
   texture.needsUpdate = true;
   return texture;
 }
+scene.add(back);
 
 // [+] Helper
 // [-] grid helper
@@ -143,5 +129,19 @@ const tick = () => {
   // [.] call tick again on the next frame
   window.requestAnimationFrame(tick);
 };
-
 tick();
+
+// [+] Window event listener
+window.addEventListener("resize", () => {
+  // [.] update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // [.] update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // [.] update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
